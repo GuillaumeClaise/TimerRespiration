@@ -19,9 +19,11 @@
   <div class="container">
     <h1>Timer Cycle</h1>
     
-    <div class="chronometer">
-      <p class="chrono-label">Chronomètre</p>
-      <p id="chronoDisplay" class="chrono-time">00:00:00</p>
+    <div class="status">
+      <p id="statusText">En attente</p>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
     </div>
 
     <div class="buttons-container">
@@ -45,11 +47,9 @@
       <button id="resetAll" class="control-btn reset-btn">Réinitialiser</button>
     </div>
 
-    <div class="status">
-      <p id="statusText">En attente</p>
-      <div class="progress-bar">
-        <div id="progressFill" class="progress-fill"></div>
-      </div>
+    <div class="chronometer">
+      <p class="chrono-label">Chronomètre</p>
+      <p id="chronoDisplay" class="chrono-time">00:00:00</p>
     </div>
 
     <div class="install-prompt" id="installPrompt" style="display: none;">
