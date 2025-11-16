@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Application de timer avec cycles continus et chronomètre">
+  <meta name="theme-color" content="#667eea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Timer Cycle">
+  <title>Timer Cycle - PWA</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+  <div class="container">
+    <h1>Timer Cycle</h1>
+    
+    <div class="chronometer">
+      <p class="chrono-label">Chronomètre</p>
+      <p id="chronoDisplay" class="chrono-time">00:00:00</p>
+    </div>
+
+    <div class="buttons-container">
+      <div class="button-row">
+        <button id="btn1" class="timer-button">Timer 1: <span id="time1">6</span>s</button>
+      </div>
+      <div class="button-row">
+        <button id="btn2" class="timer-button">Timer 2: <span id="time2">6</span>s</button>
+      </div>
+      <div class="button-row">
+        <button id="btn3" class="timer-button">Timer 3: <span id="time3">6</span>s</button>
+      </div>
+      <div class="button-row">
+        <button id="btn4" class="timer-button">Timer 4: <span id="time4">6</span>s</button>
+      </div>
+    </div>
+
+    <div class="control-buttons">
+      <button id="startCycle" class="control-btn start-btn">Démarrer le cycle</button>
+      <button id="stopCycle" class="control-btn stop-btn" disabled>Arrêter</button>
+      <button id="resetAll" class="control-btn reset-btn">Réinitialiser</button>
+    </div>
+
+    <div class="status">
+      <p id="statusText">En attente</p>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="install-prompt" id="installPrompt" style="display: none;">
+      <p>📱 Installez cette application sur votre appareil</p>
+      <button id="installButton" class="control-btn start-btn">Installer</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Enregistrer le Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker enregistré', reg))
+        .catch(err => console.log('Erreur Service Worker', err));
+    }
+
+    // Gestion de l'installation PWA
+    let deferredPrompt;
+    const installPrompt = document.getElementById('installPrompt');
+    const installButton = document.getElementById('installButton');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installPrompt.style.display = 'block';
+    });
+
+    installButton.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Installation: ${outcome}`);
+        deferredPrompt = null;
+        installPrompt.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA installée avec succès');
+      installPrompt.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
