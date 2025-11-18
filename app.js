@@ -1,5 +1,5 @@
 // Variables pour les timers (en secondes)
-let timers = [6, 6, 6, 6];
+let timers = [5, 5, 5, 5];
 let isRunning = false;
 let currentTimerIndex = 0;
 let currentSeconds = 0;
