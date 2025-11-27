@@ -13,6 +13,61 @@ let chronoIntervalId = null;
 // Contexte audio
 let audioContext = null;
 
+// Couleurs pour chaque timer
+const timerColors = ['#22c55e', '#3b82f6', '#f97316', '#a855f7'];
+// Timer 1: Vert, Timer 2: Bleu, Timer 3: Orange, Timer 4: Violet
+
+// Fonction pour générer un favicon avec une couleur spécifique
+function generateFavicon(color) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+
+  // Fond coloré
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, 64, 64);
+
+  // Cercle blanc
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(32, 32, 20, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Cercle jaune au centre
+  ctx.fillStyle = '#ffd700';
+  ctx.beginPath();
+  ctx.arc(32, 32, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  return canvas.toDataURL('image/png');
+}
+
+// Fonction pour changer l'icône et la couleur de l'onglet du navigateur
+function updateThemeColor(timerIndex) {
+  if (timerIndex >= 0 && timerIndex < 4) {
+    const color = timerColors[timerIndex];
+
+    // Changer la couleur du thème (pour mobile)
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', color);
+    }
+
+    // Changer le favicon (pour desktop et mobile)
+    const faviconUrl = generateFavicon(color);
+    let favicon = document.querySelector('link[rel="icon"]');
+
+    if (!favicon) {
+      favicon = document.createElement('link');
+      favicon.rel = 'icon';
+      document.head.appendChild(favicon);
+    }
+
+    favicon.href = faviconUrl;
+  }
+}
+
 // Initialiser le contexte audio (nécessaire pour certains navigateurs mobiles)
 function initAudioContext() {
   if (!audioContext) {
@@ -149,10 +204,11 @@ function startCycle() {
   
   resetActiveButtons();
   document.getElementById(`btn${currentTimerIndex + 1}`).classList.add('active');
-  
+
   updateStatus(`Timer ${currentTimerIndex + 1} - ${currentSeconds}/${timers[currentTimerIndex]}s`);
   updateProgress();
-  
+  updateThemeColor(currentTimerIndex); // Changer la couleur de l'onglet
+
   playBeep(); // Bip au début
   requestWakeLock(); // Empêcher la mise en veille
   
@@ -176,14 +232,16 @@ function startCycle() {
         document.getElementById(`btn${currentTimerIndex + 1}`).classList.add('active');
         updateStatus(`Timer ${currentTimerIndex + 1} - ${currentSeconds}/${timers[currentTimerIndex]}s`);
         updateProgress();
+        updateThemeColor(currentTimerIndex); // Changer la couleur de l'onglet
         return;
       }
-      
+
       // Passer au timer suivant
       resetActiveButtons();
       document.getElementById(`btn${currentTimerIndex + 1}`).classList.add('active');
       playBeep(); // Bip à chaque changement de timer
       updateStatus(`Timer ${currentTimerIndex + 1} - ${currentSeconds}/${timers[currentTimerIndex]}s`);
+      updateThemeColor(currentTimerIndex); // Changer la couleur de l'onglet
     }
   }, 1000);
 }
@@ -191,21 +249,34 @@ function startCycle() {
 // Arrêter le cycle
 function stopCycle() {
   if (!isRunning) return;
-  
+
   isRunning = false;
   clearInterval(intervalId);
   intervalId = null;
-  
+
   document.getElementById('startCycle').disabled = false;
   document.getElementById('stopCycle').disabled = true;
-  
+
   resetActiveButtons();
   releaseWakeLock(); // Permettre la mise en veille
-  
+
   if (currentTimerIndex < 4) {
     updateStatus('Cycle arrêté');
   }
-  
+
+  // Réinitialiser la couleur de l'onglet et l'icône à la couleur par défaut
+  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  if (metaThemeColor) {
+    metaThemeColor.setAttribute('content', '#667eea');
+  }
+
+  // Restaurer le favicon par défaut
+  const faviconUrl = generateFavicon('#667eea');
+  let favicon = document.querySelector('link[rel="icon"]');
+  if (favicon) {
+    favicon.href = faviconUrl;
+  }
+
   currentTimerIndex = 0;
   currentSeconds = 0;
 }
