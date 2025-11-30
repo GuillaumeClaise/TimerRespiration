@@ -1,11 +1,12 @@
-const CACHE_NAME = 'timer-cycle-v1';
+const CACHE_NAME = 'timer-cycle-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/icon-192.png',
-  '/icon-512.png'
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './icon-192.png',
+  './icon-512.png',
+  './manifest.json'
 ];
 
 // Installation du Service Worker

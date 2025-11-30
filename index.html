@@ -62,11 +62,18 @@
 
   <script src="app.js"></script>
   <script>
-    // Enregistrer le Service Worker
+    // Enregistrer le Service Worker avec meilleure gestion d'erreurs
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('Service Worker enregistré', reg))
-        .catch(err => console.log('Erreur Service Worker', err));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then(reg => {
+            console.log('Service Worker enregistré avec succès', reg.scope);
+          })
+          .catch(err => {
+            console.error('Erreur Service Worker:', err);
+            // L'app fonctionne quand même sans Service Worker
+          });
+      });
     }
 
     // Gestion de l'installation PWA
@@ -78,6 +85,7 @@
       e.preventDefault();
       deferredPrompt = e;
       installPrompt.style.display = 'block';
+      console.log('Prompt d\'installation disponible');
     });
 
     installButton.addEventListener('click', async () => {

@@ -284,7 +284,7 @@ function stopCycle() {
 // Réinitialiser tous les timers
 function resetAll() {
   stopCycle();
-  timers = [6, 6, 6, 6];
+  timers = [5, 5, 5, 5];
   updateDisplay();
   updateStatus('En attente');
   document.getElementById('progressFill').style.width = '0%';
