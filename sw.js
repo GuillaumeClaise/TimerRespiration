@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timer-cycle-v2';
+const CACHE_NAME = 'timer-cycle-v3';
 const urlsToCache = [
   './',
   './index.html',
