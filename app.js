@@ -183,8 +183,8 @@ function resetChronometer() {
 
 // Réinitialiser les boutons actifs
 function resetActiveButtons() {
-  document.querySelectorAll('.timer-button').forEach(btn => {
-    btn.classList.remove('active');
+  document.querySelectorAll('.button-row').forEach(row => {
+    row.classList.remove('active');
   });
 }
 
@@ -203,7 +203,7 @@ function startCycle() {
   document.getElementById('stopCycle').disabled = false;
   
   resetActiveButtons();
-  document.getElementById(`btn${currentTimerIndex + 1}`).classList.add('active');
+  document.querySelectorAll('.button-row')[currentTimerIndex].classList.add('active');
 
   updateStatus(`Timer ${currentTimerIndex + 1} - ${currentSeconds}/${timers[currentTimerIndex]}s`);
   updateProgress();
@@ -229,7 +229,7 @@ function startCycle() {
         currentTimerIndex = 0;
         playBeep(); // Bip entre les cycles
         resetActiveButtons();
-        document.getElementById(`btn${currentTimerIndex + 1}`).classList.add('active');
+        document.querySelectorAll('.button-row')[currentTimerIndex].classList.add('active');
         updateStatus(`Timer ${currentTimerIndex + 1} - ${currentSeconds}/${timers[currentTimerIndex]}s`);
         updateProgress();
         updateThemeColor(currentTimerIndex); // Changer la couleur de l'onglet
@@ -238,7 +238,7 @@ function startCycle() {
 
       // Passer au timer suivant
       resetActiveButtons();
-      document.getElementById(`btn${currentTimerIndex + 1}`).classList.add('active');
+      document.querySelectorAll('.button-row')[currentTimerIndex].classList.add('active');
       playBeep(); // Bip à chaque changement de timer
       updateStatus(`Timer ${currentTimerIndex + 1} - ${currentSeconds}/${timers[currentTimerIndex]}s`);
       updateThemeColor(currentTimerIndex); // Changer la couleur de l'onglet
@@ -327,16 +327,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Démarrer le chronomètre dès l'ouverture
   startChronometer();
   
-  // Ajouter les événements de clic pour les boutons de timer
-  for (let i = 0; i < 4; i++) {
-    document.getElementById(`btn${i + 1}`).addEventListener('click', () => {
+  // Ajouter les événements de clic pour les boutons d'incrémentation
+  document.querySelectorAll('.increment-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
       if (!isRunning) {
-        timers[i]++;
+        const timerIndex = parseInt(btn.getAttribute('data-timer'));
+        const incrementValue = parseInt(btn.getAttribute('data-value'));
+        timers[timerIndex] += incrementValue;
         updateDisplay();
         saveState();
       }
     });
-  }
+  });
   
   // Boutons de contrôle
   document.getElementById('startCycle').addEventListener('click', startCycle);

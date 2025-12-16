@@ -58,42 +58,105 @@ h1 {
 }
 
 .buttons-container {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 10px;
 }
 
 .button-row {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: transparent;
 }
 
-.timer-button {
-  width: 100%;
-  padding: 20px;
-  background: white;
+.button-row.active {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.button-row.active.color-0 {
+  background: #22c55e;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
+}
+
+.button-row.active.color-1 {
+  background: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+.button-row.active.color-2 {
+  background: #f97316;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+}
+
+.button-row.active.color-3 {
+  background: #a855f7;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.4);
+}
+
+.timer-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #667eea;
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.button-row.active .timer-label {
+  color: #333;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 6px;
+  margin-left: 10px;
+}
+
+.increment-btn {
+  padding: 8px 16px;
   border: none;
-  border-radius: 12px;
-  font-size: 18px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color: #667eea;
   touch-action: manipulation;
   user-select: none;
-}
-
-.timer-button:active {
-  transform: scale(0.97);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 50px;
 }
 
-.timer-button.active {
-  background: #ffd700;
-  color: #333;
-  animation: pulse 1s ease-in-out infinite;
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+.small-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.large-btn {
+  background: #2196f3;
+  color: white;
+}
+
+.increment-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.small-btn:active {
+  background: #45a049;
+}
+
+.large-btn:active {
+  background: #0b7dda;
 }
 
 @keyframes pulse {
@@ -218,13 +281,16 @@ h1 {
   h1 {
     font-size: 40px;
   }
-  
-  .timer-button:hover:not(.active) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    background: #f0f0f0;
+
+  .button-row:hover:not(.active) {
+    background: #f5f5f5;
   }
-  
+
+  .increment-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
   .control-btn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -243,8 +309,8 @@ h1 {
   body {
     -webkit-user-select: none;
   }
-  
-  .timer-button,
+
+  .increment-btn,
   .control-btn {
     -webkit-appearance: none;
   }
